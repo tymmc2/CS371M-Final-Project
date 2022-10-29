@@ -2,20 +2,24 @@
 <androidx.cardview.widget.CardView
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stock_card"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="75dp"
+    app:cardBackgroundColor="@color/white"
     android:layout_margin="12dp"
     android:elevation="10dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:padding="12dp"
         android:layout_height="match_parent">
-
         <TextView
             android:id="@+id/stock_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TSLA"
+            android:text="AAPL"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintBottom_toTopOf="@+id/stock_price"
             app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +28,7 @@
             android:id="@+id/stock_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="230.34"
+            android:text="152.34"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,12 +1,16 @@
 package com.example.stockapp.stockcard
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.stockapp.R
+import android.widget.Button
+import androidx.cardview.widget.CardView
+import com.example.stockapp.databinding.FragmentStockCardBinding
+import com.example.stockapp.stockview.StockViewActivity
 
 class StockCard : Fragment() {
 
@@ -15,12 +19,16 @@ class StockCard : Fragment() {
     }
 
     private lateinit var viewModel: StockCardViewModel
+    private var _binding: FragmentStockCardBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_stock_card, container, false)
+        _binding = FragmentStockCardBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -28,5 +36,4 @@ class StockCard : Fragment() {
         viewModel = ViewModelProvider(this)[StockCardViewModel::class.java]
         // TODO: Use the ViewModel
     }
-
 }

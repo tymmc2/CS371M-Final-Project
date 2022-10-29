@@ -5,9 +5,10 @@
       <map>
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.2206945446954257" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24909420289855072" />
-        <entry key="app/src/main/res/layout/activity_stock_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_stock_view.xml" value="0.277716064453125" />
         <entry key="app/src/main/res/layout/fragment_stock_card.xml" value="0.24909420289855072" />
         <entry key="app/src/main/res/layout/fragment_stock_graph.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_total_card.xml" value="0.184375" />
       </map>
     </option>
   </component>
