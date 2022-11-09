@@ -11,10 +11,10 @@ class TotalCardViewModel : ViewModel() {
         get() = _data
 
     fun init() {
-        _data = TotalData(BigDecimal(0.0), BigDecimal(0.0))
+        _data = TotalData(0.0, 0.0)
     }
 
-    fun changeMoney(amount: BigDecimal) {
+    fun changeMoney(amount: Double) {
         data.amount += amount
         data.amtChange = amount
     }

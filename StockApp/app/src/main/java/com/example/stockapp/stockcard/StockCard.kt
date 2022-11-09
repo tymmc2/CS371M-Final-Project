@@ -18,7 +18,6 @@ class StockCard : Fragment() {
         fun newInstance() = StockCard()
     }
 
-    private lateinit var viewModel: StockCardViewModel
     private var _binding: FragmentStockCardBinding? = null
     private val binding get() = _binding!!
 
@@ -29,11 +28,5 @@ class StockCard : Fragment() {
         _binding = FragmentStockCardBinding.inflate(inflater, container, false)
 
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this)[StockCardViewModel::class.java]
-        // TODO: Use the ViewModel
     }
 }
