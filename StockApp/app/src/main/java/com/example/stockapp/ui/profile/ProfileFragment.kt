@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.stockapp.databinding.FragmentProfileBinding
 import com.example.stockapp.profilecard.ProfileCardAdapter
 import com.example.stockapp.profilecard.ProfileCardViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 class ProfileFragment : Fragment() {
 
@@ -33,6 +34,13 @@ class ProfileFragment : Fragment() {
         val profileViewModel = ViewModelProvider(this)[ProfileCardViewModel::class.java]
         profileViewModel.init()
         binding.profileRecyclerView.setHasFixedSize(true)
+
+        binding.signOutButton.setOnClickListener {
+            val instance = FirebaseAuth.getInstance()
+            instance.signOut()
+            activity?.finish()
+        }
+
         return root
 
     }
