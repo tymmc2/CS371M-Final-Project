@@ -45,6 +45,9 @@ class StockViewActivity : AppCompatActivity() {
     {
         val stockFragment : Fragment? = supportFragmentManager.findFragmentById(R.id.stock_view_card)
         stockFragment?.view?.findViewById<TextView>(R.id.stock_price)?.text = stockItem?.price.toString()
+        stockFragment?.view?.findViewById<TextView>(R.id.stock_price_change)?.text = (stockItem?.changeInPercent?.times(
+            100
+        )).toString()
     }
 
     private fun getStockInformation(querySymbol : String?) {
