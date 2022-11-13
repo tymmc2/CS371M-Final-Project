@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import com.example.stockapp.R
+import com.example.stockapp.home.HomeActivity
+import com.example.stockapp.home.HomeActivity.Companion.convertToString
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.*
@@ -35,22 +37,14 @@ class TotalCard : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val total = view?.findViewById<TextView>(R.id.total)
         val change = view?.findViewById<TextView>(R.id.change)
-        viewModel.changeMoney(BigDecimal(500.0))
+        viewModel.changeMoney(500.0)
 
         val amount = viewModel.data.amount
         val amtChange = viewModel.data.amtChange
 
         total!!.text = convertToString(amount)
-        "${if (amtChange > BigDecimal(0)) "+" else "" }${convertToString(amtChange)}"
+        "${if (amtChange > 0.0) "+" else "" }${convertToString(amtChange)}"
             .also { change!!.text = it }
-    }
-
-    private fun convertToString(value: BigDecimal) : String {
-        val numberFormat = NumberFormat.getCurrencyInstance()
-        numberFormat.maximumFractionDigits = 2
-        numberFormat.minimumFractionDigits = 2
-
-        return numberFormat.format(value.toDouble())
     }
 
 }

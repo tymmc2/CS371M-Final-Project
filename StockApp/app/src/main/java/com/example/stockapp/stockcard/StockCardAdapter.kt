@@ -7,22 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockapp.R
-import com.example.stockapp.home.HomeActivity
+import com.example.stockapp.home.HomeActivity.Companion.convertToString
 import com.example.stockapp.stockview.StockViewActivity
-import java.security.AccessController.getContext
+import com.example.stockapp.ui.home.HomeFragment
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 
 class StockCardAdapter(
-    private val context: Context?
+    private val context: Context?,
+    private val sellable: Boolean
 ): RecyclerView.Adapter<StockCardAdapter.StockCardHolder>() {
 
-    private var items: ArrayList<StockData> = ArrayList()
+    private var items: ArrayList<StockData> = if (!sellable) SampleData.items else ArrayList()
 
     class StockCardHolder(view: View?): RecyclerView.ViewHolder(view!!) {
         val stockCard: CardView = view!!.findViewById(R.id.stock_card)
+        val stockName: TextView = view!!.findViewById(R.id.stock_name)
+        val stockPrice: TextView = view!!.findViewById(R.id.stock_price)
+        val stockPriceChange: TextView = view!!.findViewById(R.id.stock_price_change)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockCardHolder {
@@ -35,11 +39,16 @@ class StockCardAdapter(
     }
 
     fun updateData(list: List<StockData>) {
+        println("Updating data with list length of ${list.size}")
         items.clear()
         items.addAll(list)
+        println("new length = ${items.size}")
+        this.notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = 5
+    override fun getItemCount(): Int {
+        return if (items.size > 0) items.size else 0
+    }
 
     override fun onBindViewHolder(holder: StockCardHolder, position: Int) {
         // Update the stock card here
@@ -49,7 +58,12 @@ class StockCardAdapter(
             val intent = Intent(this@StockCardAdapter.context, StockViewActivity::class.java)
             val stockSymbol = stockCard.findViewById<TextView>(R.id.stock_name).text
             intent.putExtra(StockViewActivity().SYMBOL, stockSymbol)
+            intent.putExtra("stock_data", Json.encodeToString(items[position]))
+            intent.putExtra("sellable", sellable);
             it.context.startActivity(intent)
         }
+        holder.stockName.text = items[position].stockName
+        holder.stockPrice.text = convertToString(items[position].stockPrice)
+        holder.stockPriceChange.text = items[position].stockPriceChange
     }
 }

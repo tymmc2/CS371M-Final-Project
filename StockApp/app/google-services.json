@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "695078339164",
+    "project_id": "stocksage-d81a6",
+    "storage_bucket": "stocksage-d81a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695078339164:android:a0c866f069e3e20138dc99",
+        "android_client_info": {
+          "package_name": "com.example.stockapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695078339164-n1j489gihf7kq1ih1tfjdfu399ujqfc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6tNFoWUSyUIEiVH8akLI1EZuf7l2zvoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695078339164-n1j489gihf7kq1ih1tfjdfu399ujqfc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

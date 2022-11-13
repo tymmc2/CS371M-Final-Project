@@ -1,7 +1,11 @@
 package com.example.stockapp.stockcard
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class StockData (
     val stockName : String,
-    val stockPrice : Float,
-    val stockPriceChange : Float
+    val fullStockName: String,
+    val stockPrice : Double,
+    val stockPriceChange : String
 )
