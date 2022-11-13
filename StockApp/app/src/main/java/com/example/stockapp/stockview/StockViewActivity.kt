@@ -72,11 +72,12 @@ class StockViewActivity : AppCompatActivity() {
 
     private fun updateUI()
     {
-        val stockFragment : Fragment? = supportFragmentManager.findFragmentById(R.id.stock_view_card)
-        stockFragment?.view?.findViewById<TextView>(R.id.stock_price)?.text = stockItem?.price.toString()
-        stockFragment?.view?.findViewById<TextView>(R.id.stock_price_change)?.text = (stockItem?.changeInPercent?.times(
-            100
-        )).toString()
+        binding.svStockName.text= stockItem?.name.toString()
+        binding.svStockPrice.text = stockItem?.price?.let { convertToString(it) }
+        binding.svStockPriceChange.text = stockItem?.changeInPercent.toString()
+
+//        val stockFragment : Fragment? = supportFragmentManager.findFragmentById(R.id.stock_view_card)
+//        stockFragment?.view?.findViewById<TextView>(R.id.stock_price)?.text = stockItem?.price.toString()
     }
 
     private fun getStockInformation(querySymbol : String?) {
