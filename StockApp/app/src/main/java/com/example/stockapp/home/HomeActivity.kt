@@ -11,7 +11,13 @@ import com.example.stockapp.R
 import com.example.stockapp.stockcard.StockCardAdapter
 import com.example.stockapp.databinding.ActivityHomeBinding
 import com.example.stockapp.stockcard.StockCardViewModel
+import com.example.stockapp.stockservice.StockAPI
+import com.example.stockapp.stockservice.StockItem
+import com.example.stockapp.stockservice.YahooFinanceQuoteProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import yahoofinance.YahooFinance
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -20,8 +26,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         val navView: BottomNavigationView = binding.navView
 
@@ -33,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

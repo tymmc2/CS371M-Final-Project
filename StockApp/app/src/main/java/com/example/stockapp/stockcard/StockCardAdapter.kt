@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.startActivity
@@ -44,7 +45,10 @@ class StockCardAdapter(
         // Update the stock card here
         val stockCard: CardView = holder.stockCard
         stockCard.setOnClickListener{
+
             val intent = Intent(this@StockCardAdapter.context, StockViewActivity::class.java)
+            val stockSymbol = stockCard.findViewById<TextView>(R.id.stock_name).text
+            intent.putExtra(StockViewActivity().SYMBOL, stockSymbol)
             it.context.startActivity(intent)
         }
     }
