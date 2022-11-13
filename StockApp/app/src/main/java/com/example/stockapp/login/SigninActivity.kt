@@ -40,6 +40,10 @@ class SigninActivity : AppCompatActivity() {
     private fun login() {
         val username = binding.username.text.toString()
         val password = binding.password.text.toString()
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(applicationContext, "Failed to login!", Toast.LENGTH_SHORT).show()
+            return;
+        }
         auth.signInWithEmailAndPassword(username, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
