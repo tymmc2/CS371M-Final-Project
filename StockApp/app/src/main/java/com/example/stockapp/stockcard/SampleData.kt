@@ -33,7 +33,7 @@ object SampleData {
             10.0
         ),
         StockData(
-            "ATT",
+            "T",
             "AT&T",
             23.39,
             "+6.34",

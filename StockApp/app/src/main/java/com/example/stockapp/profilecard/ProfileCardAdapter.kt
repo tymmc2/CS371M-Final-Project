@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockapp.R
-import com.example.stockapp.home.HomeActivity.Companion.convertToString
+import com.example.stockapp.home.HomeActivity.Companion.convertPriceToString
 
 class ProfileCardAdapter(
     private val context: Context?
@@ -37,7 +37,7 @@ class ProfileCardAdapter(
     override fun onBindViewHolder(holder: ProfileCardHolder, position: Int) {
         holder.profileName.text = items[position].profileName
         holder.profileValue.text = context?.getString(R.string.profile_value,
-            convertToString(items[position].profileValue))
+            convertPriceToString(items[position].profileValue))
     }
 
     fun updateData(list : List<ProfileData>) {

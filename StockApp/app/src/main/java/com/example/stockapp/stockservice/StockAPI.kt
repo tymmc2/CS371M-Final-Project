@@ -2,20 +2,15 @@ package com.example.stockapp.stockservice
 
 import android.util.Log
 import com.example.stockapp.stockcache.StockDataCache
-import com.example.stockapp.stockcard.StockData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import yahoofinance.Stock
 import yahoofinance.YahooFinance
 import java.lang.Exception
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 class StockAPI {
 
@@ -106,9 +101,13 @@ class StockAPI {
         }
     }
 
+    val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+        throwable.printStackTrace()
+    }
+
     fun getStockQuoteValue(name : String, callback : StockItemListFetched)
     {
-        GlobalScope.launch (Dispatchers.IO){
+        GlobalScope.launch (Dispatchers.IO + coroutineExceptionHandler){
             val job = async { YahooFinanceQuoteProvider().getStockQuote(name) }
             val result = job.await()
             val stockResult = result?.let { buildStockItemFromResponse(it) }

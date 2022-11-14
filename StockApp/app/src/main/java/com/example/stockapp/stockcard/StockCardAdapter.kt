@@ -2,6 +2,7 @@ package com.example.stockapp.stockcard
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,11 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stockapp.R
-import com.example.stockapp.home.HomeActivity.Companion.convertToString
+import com.example.stockapp.home.HomeActivity.Companion.convertPriceToString
 import com.example.stockapp.stockview.StockViewActivity
-import com.example.stockapp.ui.home.HomeFragment
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
+import yahoofinance.Stock
 
 class StockCardAdapter(
     private val context: Context?,
@@ -39,10 +40,8 @@ class StockCardAdapter(
     }
 
     fun updateData(list: List<StockData>) {
-        println("Updating data with list length of ${list.size}")
         items.clear()
         items.addAll(list)
-        println("new length = ${items.size}")
         this.notifyDataSetChanged()
     }
 
@@ -57,13 +56,16 @@ class StockCardAdapter(
 
             val intent = Intent(this@StockCardAdapter.context, StockViewActivity::class.java)
             val stockSymbol = stockCard.findViewById<TextView>(R.id.stock_name).text
-            intent.putExtra(StockViewActivity().SYMBOL, stockSymbol)
-            intent.putExtra("stock_data", Json.encodeToString(items[position]))
-            intent.putExtra("sellable", sellable);
+            intent.putExtra(StockViewActivity.SYMBOL, stockSymbol)
+            intent.putExtra(StockViewActivity.STOCK_DATA, Json.encodeToString(items[position]))
+            intent.putExtra(StockViewActivity.SELLABLE, sellable);
             it.context.startActivity(intent)
         }
         holder.stockName.text = items[position].stockName
-        holder.stockPrice.text = convertToString(items[position].stockPrice)
+        holder.stockPrice.text = convertPriceToString(items[position].stockPrice)
         holder.stockPriceChange.text = items[position].stockPriceChange
+        if (items[position].stockPriceChange.contains("-")) {
+            holder.stockPriceChange.setTextColor(Color.RED)
+        }
     }
 }

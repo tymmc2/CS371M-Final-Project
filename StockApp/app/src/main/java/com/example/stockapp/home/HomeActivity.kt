@@ -15,12 +15,20 @@ import java.text.NumberFormat
 
 class HomeActivity : AppCompatActivity() {
     companion object {
-        fun convertToString(value: Double) : String {
+        fun convertPriceToString(value: Double) : String {
             val numberFormat = NumberFormat.getCurrencyInstance()
             numberFormat.maximumFractionDigits = 2
             numberFormat.minimumFractionDigits = 2
 
             return numberFormat.format(value)
+        }
+
+        fun convertPriceChangeToString(value: Double) : String {
+            val numberFormat = NumberFormat.getPercentInstance()
+            numberFormat.maximumFractionDigits = 2
+            numberFormat.minimumFractionDigits = 2
+
+            return "${if (value > 0.0) "+" else "-"}${numberFormat.format(value)}"
         }
     }
 

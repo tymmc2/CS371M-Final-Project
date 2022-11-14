@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class StockData (
     val stockName : String,
     val fullStockName: String,
-    val stockPrice : Double,
-    val stockPriceChange : String,
+    var stockPrice : Double,
+    var stockPriceChange : String,
     val quantityHolding: Double
 )

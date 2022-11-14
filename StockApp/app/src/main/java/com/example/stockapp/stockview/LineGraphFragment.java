@@ -1,10 +1,13 @@
 package com.example.stockapp.stockview;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -51,8 +54,12 @@ public class LineGraphFragment extends Fragment {
      *
      * @return A new instance of fragment LineGraphFragment.
      */
-    public static LineGraphFragment newInstance() {
+    public static LineGraphFragment newInstance(String symbol, Double priceChange) {
         LineGraphFragment fragment = new LineGraphFragment();
+        Bundle args = new Bundle();
+        args.putString(StockViewActivity.SYMBOL, symbol);
+        args.putDouble(StockViewActivity.PRICE_CHANGE, priceChange);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -67,7 +74,6 @@ public class LineGraphFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_line_graph, container, false);
         {
             chart = view.findViewById(R.id.chart);
-            chart.setBackgroundColor(Color.WHITE);
             chart.getDescription().setEnabled(false);
             chart.setDrawGridBackground(false);
             chart.setDragEnabled(true);
@@ -77,7 +83,6 @@ public class LineGraphFragment extends Fragment {
         XAxis xAxis;
         {
             xAxis = chart.getXAxis();
-
         }
 
         YAxis yAxis;
@@ -88,10 +93,17 @@ public class LineGraphFragment extends Fragment {
 
             // axis range
             yAxis.setAxisMaximum(200f);
-            yAxis.setAxisMinimum(-40f);
+            yAxis.setAxisMinimum(0f);
         }
 
-        setData(20, 180);
+        double priceChange = 0;
+        boolean isNegative = false;
+        if (getArguments() != null) {
+            priceChange = getArguments().getDouble(StockViewActivity.PRICE_CHANGE);
+            isNegative = priceChange < 0.0;
+        }
+
+        setData(20, 180, isNegative);
 
         chart.animateX(1500);
         chart.getLegend().setEnabled(false);
@@ -99,13 +111,13 @@ public class LineGraphFragment extends Fragment {
         return view;
     }
 
-    private void setData(int count, float range) {
+    private void setData(int count, float range, boolean isNegative) {
 
         ArrayList<Entry> values = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
 
-            float val = (float) (Math.random() * range) - 30;
+            float val = (float) (Math.random() * range);
             values.add(new Entry(i, val, getResources().getDrawable(R.drawable.star)));
         }
 
@@ -123,9 +135,11 @@ public class LineGraphFragment extends Fragment {
             set1 = new LineDataSet(values, "AAPL");
 
             set1.setDrawIcons(false);
-
-            // black lines and points
-            set1.setColor(Color.RED);
+            if (isNegative) {
+                set1.setColor(Color.RED);
+            } else {
+                set1.setColor(Color.GREEN);
+            }
 
             // line thickness and point size
             set1.setLineWidth(2f);
@@ -149,7 +163,12 @@ public class LineGraphFragment extends Fragment {
             // set color of filled area
             if (Utils.getSDKInt() >= 18) {
                 // drawables only supported on api level 18 and above
-                Drawable drawable = ContextCompat.getDrawable(this.getContext(), R.drawable.fade_red);
+                Drawable drawable;
+                if (isNegative) {
+                    drawable = ContextCompat.getDrawable(this.getContext(), R.drawable.fade_red);
+                } else {
+                    drawable = ContextCompat.getDrawable(this.getContext(), R.drawable.fade_green);
+                }
                 set1.setFillDrawable(drawable);
             } else {
                 set1.setFillColor(Color.BLACK);
