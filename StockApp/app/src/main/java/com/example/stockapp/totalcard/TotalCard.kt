@@ -6,14 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import com.example.stockapp.R
-import com.example.stockapp.home.HomeActivity
-import com.example.stockapp.home.HomeActivity.Companion.convertToString
-import java.math.BigDecimal
-import java.text.NumberFormat
-import java.util.*
+import com.example.stockapp.home.HomeActivity.Companion.convertPriceToString
 
 class TotalCard : Fragment() {
 
@@ -42,8 +37,8 @@ class TotalCard : Fragment() {
         val amount = viewModel.data.amount
         val amtChange = viewModel.data.amtChange
 
-        total!!.text = convertToString(amount)
-        "${if (amtChange > 0.0) "+" else "" }${convertToString(amtChange)}"
+        total!!.text = convertPriceToString(amount)
+        "${if (amtChange > 0.0) "+" else "" }${convertPriceToString(amtChange)}"
             .also { change!!.text = it }
     }
 

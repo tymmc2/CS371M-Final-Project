@@ -1,10 +1,6 @@
 package com.example.stockapp.stockview
 
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import com.example.stockapp.R
 import com.example.stockapp.databinding.ActivityStockViewBinding
 import com.example.stockapp.stockservice.StockAPI
 import com.example.stockapp.stockservice.StockItem
@@ -12,11 +8,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import com.example.stockapp.R
 import com.example.stockapp.buysellview.BuySellActivity
-import com.example.stockapp.home.HomeActivity.Companion.convertToString
+import com.example.stockapp.home.HomeActivity.Companion.convertPriceChangeToString
+import com.example.stockapp.home.HomeActivity.Companion.convertPriceToString
 import com.example.stockapp.stockcard.StockData
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -27,7 +26,13 @@ class StockViewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStockViewBinding
     private lateinit var stockData: StockData
 
-    val SYMBOL : String = "symbol"
+    companion object {
+        const val SYMBOL : String = "symbol"
+        const val PRICE_CHANGE : String = "price_change"
+        const val STOCK_DATA : String = "stock_data"
+        const val SELLABLE : String = "sellable"
+        const val TYPE : String = "type"
+    }
     private var stockItem : StockItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +40,11 @@ class StockViewActivity : AppCompatActivity() {
         binding = ActivityStockViewBinding.inflate(layoutInflater)
         val extras = intent.extras
         if (extras != null) {
-            val value = extras.getString("stock_data")
+            val value = extras.getString(STOCK_DATA)
             if (value != null) {
                 stockData = Json.decodeFromString(value)
-                binding.svStockName.text = stockData.stockName
-                binding.svStockPrice.text = convertToString(stockData.stockPrice)
-                binding.svStockPriceChange.text = stockData.stockPriceChange
             }
-            val sellable = extras.getBoolean("sellable")
+            val sellable = extras.getBoolean(SELLABLE)
             if (!sellable) {
                 binding.sellButton.visibility = View.GONE
             }
@@ -55,15 +57,15 @@ class StockViewActivity : AppCompatActivity() {
 
         binding.buyButton.setOnClickListener{
             val intent = Intent(this, BuySellActivity::class.java)
-            intent.putExtra("stock_data", Json.encodeToString(stockData))
-            intent.putExtra("type", getString(com.example.stockapp.R.string.buy))
+            intent.putExtra(STOCK_DATA, Json.encodeToString(stockData))
+            intent.putExtra(TYPE, getString(com.example.stockapp.R.string.buy))
             it.context.startActivity(intent)
         }
 
         binding.sellButton.setOnClickListener{
             val intent = Intent(this, BuySellActivity::class.java)
-            intent.putExtra("stock_data", Json.encodeToString(stockData))
-            intent.putExtra("type", getString(com.example.stockapp.R.string.sell))
+            intent.putExtra(STOCK_DATA, Json.encodeToString(stockData))
+            intent.putExtra(TYPE, getString(com.example.stockapp.R.string.sell))
             it.context.startActivity(intent)
         }
 
@@ -73,8 +75,24 @@ class StockViewActivity : AppCompatActivity() {
     private fun updateUI()
     {
         binding.svStockName.text= stockItem?.name.toString()
-        binding.svStockPrice.text = stockItem?.price?.let { convertToString(it) }
-        binding.svStockPriceChange.text = stockItem?.changeInPercent.toString()
+        binding.svStockPrice.text = stockItem?.price?.let { convertPriceToString(it) }
+        stockData.stockPrice = stockItem?.price!!
+        val changeStr = stockItem?.changeInPercent?.let {
+            val str = convertPriceChangeToString(it)
+            if (it < 0.0) binding.svStockPriceChange.setTextColor(Color.RED)
+            str
+        }
+        binding.svStockPriceChange.text = changeStr
+        stockData.stockPriceChange = changeStr!!
+
+        binding.svHigh.text = stockItem?.dayHigh?.toString()
+        binding.svLow.text = stockItem?.dayLow?.toString()
+        binding.svOpen.text = stockItem?.open?.toString()
+        binding.svPreviousClose.text = stockItem?.previousClose?.toString()
+        binding.svVolume.text = stockItem?.volume?.toString()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.sv_line_graph, LineGraphFragment.newInstance(binding.svStockName.text.toString(), stockItem?.changeInPercent))
+        transaction.commit()
 
 //        val stockFragment : Fragment? = supportFragmentManager.findFragmentById(R.id.stock_view_card)
 //        stockFragment?.view?.findViewById<TextView>(R.id.stock_price)?.text = stockItem?.price.toString()

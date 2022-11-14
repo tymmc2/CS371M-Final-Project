@@ -1,23 +1,23 @@
 package com.example.stockapp.buysellview
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.example.stockapp.databinding.ActivityBuySellBinding
-import com.example.stockapp.home.HomeActivity.Companion.convertToString
-import com.example.stockapp.stockcard.StockCardViewModel
+import com.example.stockapp.home.HomeActivity
+import com.example.stockapp.home.HomeActivity.Companion.convertPriceToString
 import com.example.stockapp.stockcard.StockData
+import com.example.stockapp.stockview.StockViewActivity
 import com.example.stockapp.ui.home.HomeFragment
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.lang.NumberFormatException
-import java.math.BigDecimal
+
 
 class BuySellActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBuySellBinding
@@ -32,11 +32,11 @@ class BuySellActivity : AppCompatActivity() {
         binding = ActivityBuySellBinding.inflate(layoutInflater)
         val extras = intent.extras
         if (extras != null) {
-            val data = extras.getString("stock_data")
+            val data = extras.getString(StockViewActivity.STOCK_DATA)
             if (data != null) {
                 stockData = Json.decodeFromString(data)
             }
-            type = extras.getString("type")!!
+            type = extras.getString(StockViewActivity.TYPE)!!
             binding.bsButton.text = type
             isSell = type == getString(com.example.stockapp.R.string.sell)
         }
@@ -44,7 +44,7 @@ class BuySellActivity : AppCompatActivity() {
 
         binding.bsStockFullName.text = stockData.fullStockName
         binding.bsStockName.text = stockData.stockName
-        binding.bsSharePrice.text = convertToString(stockData.stockPrice)
+        binding.bsSharePrice.text = convertPriceToString(stockData.stockPrice)
         binding.bsEditText.doOnTextChanged { text, _, _, _ ->
             val len = text?.length!!
             binding.bsShareCount.text = if (len in 1..9) text else "0"
@@ -52,7 +52,7 @@ class BuySellActivity : AppCompatActivity() {
                 val value: Int = if (len in 1..9) Integer.parseInt(text.toString()) else 0
                 total = value * stockData.stockPrice
                 totalStock = value
-                binding.bsTotal.text = convertToString(total)
+                binding.bsTotal.text = convertPriceToString(total)
             } catch (e: NumberFormatException) {
                 total = 0.0
                 totalStock = 0
@@ -76,6 +76,13 @@ class BuySellActivity : AppCompatActivity() {
                 .show()
 
         }
+
+        binding.gotoHomeBtn.setOnClickListener{
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+
         setContentView(binding.root)
     }
 

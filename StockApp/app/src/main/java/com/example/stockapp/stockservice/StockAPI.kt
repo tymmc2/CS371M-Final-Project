@@ -1,10 +1,7 @@
 package com.example.stockapp.stockservice
 
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import yahoofinance.Stock
 import yahoofinance.YahooFinance
@@ -97,9 +94,13 @@ class StockAPI {
         return stockItemList
     }
 
+    val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+        throwable.printStackTrace()
+    }
+
     fun getStockQuoteValue(name : String, callback : StockItemListFetched)
     {
-        GlobalScope.launch (Dispatchers.IO){
+        GlobalScope.launch (Dispatchers.IO + coroutineExceptionHandler){
             val job = async { YahooFinanceQuoteProvider().getStockQuote(name) }
             val result = job.await()
             val stockResult = result?.let { buildStockItemFromResponse(it) }
