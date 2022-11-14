@@ -1,6 +1,8 @@
 package com.example.stockapp.stockservice
 
 import android.util.Log
+import com.example.stockapp.stockcache.StockDataCache
+import com.example.stockapp.stockcard.StockData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -78,23 +80,30 @@ class StockAPI {
         return result
     }
 
-    private fun getStockQuotesPortfolio(symbols : Array<String>): MutableList<StockItem> {
+    fun getStockQuotesPortfolio(symbols : MutableMap<String, Double>, callback : FetchCompleteListener) {
         var stockItemList : MutableList<StockItem> = mutableListOf()
-        try {
-            //TODO add a broadcast
-            val stockMap: MutableMap<String, Stock>? = YahooFinance.get(symbols)
 
-            for (symbol in symbols)
+        try {
+            for (symbol in symbols.keys)
             {
-                val stock = stockMap?.get(symbol)
-                val stockItem = stock?.let { buildStockItem(it) }
-                stockItem?.let { stockItemList.add(it) }
+                getStockQuoteValue(symbol, object : StockItemListFetched
+                {
+                    override fun onSuccess(result: StockItem) {
+                        stockItemList.add(result)
+                        StockDataCache.addStockToCache(result)
+                        callback.onSuccess(stockItemList)
+                    }
+                    override fun onError() {
+
+                    }
+
+                })
             }
+
 
         } catch (exception: Exception) {
             Log.d("Stock API", "network batch call failed for stock : " + exception.message)
         }
-        return stockItemList
     }
 
     fun getStockQuoteValue(name : String, callback : StockItemListFetched)
@@ -115,6 +124,12 @@ class StockAPI {
     public interface StockItemListFetched
     {
         fun onSuccess(result : StockItem)
+        fun onError()
+    }
+
+    public interface FetchCompleteListener
+    {
+        fun onSuccess(result : MutableList<StockItem> )
         fun onError()
     }
 

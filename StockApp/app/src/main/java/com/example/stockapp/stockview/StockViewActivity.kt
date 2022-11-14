@@ -17,7 +17,10 @@ import android.view.MenuItem
 import android.view.View
 import com.example.stockapp.buysellview.BuySellActivity
 import com.example.stockapp.home.HomeActivity.Companion.convertToString
+import com.example.stockapp.stockcache.StockDataCache
+import com.example.stockapp.stockcache.StockSharedPref
 import com.example.stockapp.stockcard.StockData
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -75,11 +78,9 @@ class StockViewActivity : AppCompatActivity() {
         binding.svStockName.text= stockItem?.name.toString()
         binding.svStockPrice.text = stockItem?.price?.let { convertToString(it) }
         binding.svStockPriceChange.text = stockItem?.changeInPercent.toString()
-
-//        val stockFragment : Fragment? = supportFragmentManager.findFragmentById(R.id.stock_view_card)
-//        stockFragment?.view?.findViewById<TextView>(R.id.stock_price)?.text = stockItem?.price.toString()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun getStockInformation(querySymbol : String?) {
         val stockAPI = StockAPI()
         if (querySymbol != null)
@@ -87,6 +88,7 @@ class StockViewActivity : AppCompatActivity() {
             stockAPI.getStockQuoteValue(querySymbol, object : StockAPI.StockItemListFetched{
                 override fun onSuccess(result: StockItem) {
                         stockItem = result
+                        StockDataCache.addStockToCache(stockItem!!)
                         GlobalScope.launch(Dispatchers.Main) { updateUI() }
                 }
 

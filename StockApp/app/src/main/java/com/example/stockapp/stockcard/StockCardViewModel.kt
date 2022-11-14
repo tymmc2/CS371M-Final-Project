@@ -1,6 +1,8 @@
 package com.example.stockapp.stockcard
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
+import com.example.stockapp.stockcache.StockSharedPref
 import com.example.stockapp.ui.home.HomeFragment
 
 class StockCardViewModel : ViewModel() {

@@ -8,16 +8,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.example.stockapp.databinding.ActivityBuySellBinding
 import com.example.stockapp.home.HomeActivity.Companion.convertToString
-import com.example.stockapp.stockcard.StockCardViewModel
 import com.example.stockapp.stockcard.StockData
 import com.example.stockapp.ui.home.HomeFragment
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.lang.NumberFormatException
-import java.math.BigDecimal
 
 class BuySellActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBuySellBinding
@@ -70,7 +67,7 @@ class BuySellActivity : AppCompatActivity() {
             false
         }
         binding.bsButton.setOnClickListener {
-            if (isSell) HomeFragment.updateData(stockData, false) else HomeFragment.updateData(stockData, true)
+            if (isSell) HomeFragment.updateData(stockData, false, applicationContext) else HomeFragment.updateData(stockData, true,applicationContext)
             Toast.makeText(applicationContext,
                 "${if (isSell) "Sold" else "Bought"} $totalStock stock of ${stockData.stockName}", Toast.LENGTH_SHORT)
                 .show()

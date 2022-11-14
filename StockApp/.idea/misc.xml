@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.34172661870503596" />
         <entry key="app/src/main/res/drawable/fade_green.xml" value="0.2015" />
         <entry key="app/src/main/res/drawable/fade_red.xml" value="0.2015" />
         <entry key="app/src/main/res/drawable/ic_coin.xml" value="0.296" />
