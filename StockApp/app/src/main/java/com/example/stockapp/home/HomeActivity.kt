@@ -1,5 +1,7 @@
 package com.example.stockapp.home
 
+import android.arch.persistence.room.Database
+import android.arch.persistence.room.Room
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +10,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.stockapp.R
+import com.example.stockapp.database.StockDataEntity
+import com.example.stockapp.database.StockEntityDatabase
 import com.example.stockapp.databinding.ActivityHomeBinding
 import com.example.stockapp.search.SearchActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
