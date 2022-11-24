@@ -35,6 +35,7 @@ class StockViewActivity : AppCompatActivity() {
         const val STOCK_DATA : String = "stock_data"
         const val SELLABLE : String = "sellable"
         const val TYPE : String = "type"
+        const val CURRENT_PRICE : String = "current_price"
     }
     private var stockItem : StockItem? = null
 
@@ -77,28 +78,28 @@ class StockViewActivity : AppCompatActivity() {
 
     private fun updateUI()
     {
-        binding.svStockName.text= stockItem?.name.toString()
-        binding.svStockPrice.text = stockItem?.price?.let { convertPriceToString(it) }
-        stockData.stockPrice = stockItem?.price!!
-        val changeStr = stockItem?.changeInPercent?.let {
-            val str = convertPriceChangeToString(it)
-            if (it < 0.0) binding.svStockPriceChange.setTextColor(Color.RED)
-            str
+        if (stockItem != null) {
+            binding.svStockName.text= stockItem?.name.toString()
+            binding.svStockPrice.text = stockItem?.price?.let { convertPriceToString(it) }
+            stockData.stockPrice = stockItem?.price!!
+            val changeStr = stockItem?.changeInPercent?.let {
+                val str = convertPriceChangeToString(it)
+                if (it < 0.0) binding.svStockPriceChange.setTextColor(Color.RED)
+                str
+            }
+            binding.svStockPriceChange.text = changeStr
+            stockData.stockPriceChange = changeStr!!
+
+            binding.svHigh.text = stockItem?.dayHigh?.toString()
+            binding.svLow.text = stockItem?.dayLow?.toString()
+            binding.svOpen.text = stockItem?.open?.toString()
+            binding.svPreviousClose.text = stockItem?.previousClose?.toString()
+            binding.svVolume.text = stockItem?.volume?.toString()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.sv_line_graph, LineGraphFragment.newInstance(stockItem!!.symbol, stockItem?.changeInPercent, stockItem?.price!!.toFloat()))
+            transaction.commit()
         }
-        binding.svStockPriceChange.text = changeStr
-        stockData.stockPriceChange = changeStr!!
 
-        binding.svHigh.text = stockItem?.dayHigh?.toString()
-        binding.svLow.text = stockItem?.dayLow?.toString()
-        binding.svOpen.text = stockItem?.open?.toString()
-        binding.svPreviousClose.text = stockItem?.previousClose?.toString()
-        binding.svVolume.text = stockItem?.volume?.toString()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.sv_line_graph, LineGraphFragment.newInstance(binding.svStockName.text.toString(), stockItem?.changeInPercent))
-        transaction.commit()
-
-//        val stockFragment : Fragment? = supportFragmentManager.findFragmentById(R.id.stock_view_card)
-//        stockFragment?.view?.findViewById<TextView>(R.id.stock_price)?.text = stockItem?.price.toString()
     }
 
     @OptIn(DelicateCoroutinesApi::class)

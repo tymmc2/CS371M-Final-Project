@@ -2,15 +2,12 @@ package com.example.stockapp.stockservice
 
 import android.util.Log
 import com.example.stockapp.stockcache.StockDataCache
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.example.stockapp.stockview.LGCacheItem
+import com.example.stockapp.stockview.LineGraphCache
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import yahoofinance.Stock
 import yahoofinance.YahooFinance
-import java.lang.Exception
 
 class StockAPI {
 
@@ -118,6 +115,38 @@ class StockAPI {
             else
                 callback.onError()
         }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun getStockHistory(symbol : String, callback : StockHistoryFetched)
+    {
+        GlobalScope.launch (Dispatchers.IO + coroutineExceptionHandler){
+            lateinit var stock: Stock
+            val values = ArrayList<Float>()
+            val job = async {
+                System.setProperty("http.agent", "")
+                stock = YahooFinance.get(symbol, true)
+                val history = stock.history
+                for (i in history.indices) {
+                    val currentQuote = history[i]
+                    values.add(currentQuote.close.toFloat())
+                }
+            }
+            val result = job.await()
+            LineGraphCache.getLineGraphCache().addToCache(symbol, values);
+
+            if (result != null) {
+                callback.onSuccess(values)
+            }
+            else
+                callback.onError()
+        }
+    }
+
+    interface StockHistoryFetched
+    {
+        fun onSuccess(result : List<Float>)
+        fun onError()
     }
 
     public interface StockItemListFetched
