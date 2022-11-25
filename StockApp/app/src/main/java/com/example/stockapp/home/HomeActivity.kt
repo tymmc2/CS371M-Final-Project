@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.stockapp.R
 import com.example.stockapp.databinding.ActivityHomeBinding
+import com.example.stockapp.search.AllStockCache
 import com.example.stockapp.search.SearchActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.text.NumberFormat
@@ -49,6 +50,8 @@ class HomeActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
+
+        AllStockCache.getAllStockCache()
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

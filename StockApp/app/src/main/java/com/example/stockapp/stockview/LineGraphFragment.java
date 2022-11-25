@@ -136,12 +136,17 @@ public class LineGraphFragment extends Fragment {
         @Override
         public void onSuccess(@NonNull List<Float> result) {
             updateEntries(result);
-            updateData(isNegative);
+            requireActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateData(isNegative);
+                }
+            });
         }
 
         @Override
         public void onError() {
-
+            System.out.println("Failed to fetch historical data");
         }
     }
 

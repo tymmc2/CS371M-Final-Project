@@ -9,15 +9,15 @@ public class LineGraphCache {
 
     private LineGraphCache() { }
 
-    private static void createCache() {
-        cacheInstance = new LineGraphCache();
-        cache = new ArrayList<>();
-    }
-
     public static LineGraphCache getLineGraphCache() {
         if (cacheInstance == null)
             createCache();
         return cacheInstance;
+    }
+
+    private static void createCache() {
+        cacheInstance = new LineGraphCache();
+        cache = new ArrayList<>();
     }
 
     public void addToCache(String symbol, List<Float> values) {
