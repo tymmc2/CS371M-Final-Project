@@ -1,4 +1,5 @@
 package com.example.stockapp.stockservice
+import com.example.stockapp.stockservice.StockAPI.Companion.inputStreamToString
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -27,14 +28,5 @@ class YahooFinanceQuoteProvider{
 
         } else
             throw Exception("Error: YahooFinanceQuoteProvider response code " + connection.responseCode)
-    }
-
-    private fun inputStreamToString(inputStream: InputStream) : String {
-        var content: String
-        BufferedReader(inputStream.reader()).use { reader ->
-            content = reader.readText()
-        }
-
-        return content
     }
 }

@@ -1,18 +1,30 @@
 package com.example.stockapp.stockservice
 
 import android.util.Log
+import com.example.stockapp.search.AllStockCache
 import com.example.stockapp.stockcache.StockDataCache
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.example.stockapp.stockcard.StockData
+import com.example.stockapp.stockview.LGCacheItem
+import com.example.stockapp.stockview.LineGraphCache
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import yahoofinance.Stock
 import yahoofinance.YahooFinance
-import java.lang.Exception
+import java.io.BufferedReader
+import java.io.InputStream
 
 class StockAPI {
+
+    companion object {
+        fun inputStreamToString(inputStream: InputStream) : String {
+            var content: String
+            BufferedReader(inputStream.reader()).use { reader ->
+                content = reader.readText()
+            }
+
+            return content
+        }
+    }
 
     private fun buildStockItem(stock : Stock): StockItem {
         return StockItem(
@@ -120,13 +132,91 @@ class StockAPI {
         }
     }
 
-    public interface StockItemListFetched
+    @OptIn(DelicateCoroutinesApi::class)
+    fun getStockHistory(symbol : String, callback : StockHistoryFetched)
+    {
+        GlobalScope.launch (Dispatchers.IO + coroutineExceptionHandler){
+            lateinit var stock: Stock
+            val values = ArrayList<Float>()
+            val job = async {
+                System.setProperty("http.agent", "")
+                stock = YahooFinance.get(symbol, true)
+                val history = stock.history
+                for (i in history.indices) {
+                    val currentQuote = history[i]
+                    values.add(currentQuote.close.toFloat())
+                }
+            }
+            val result = job.await()
+            LineGraphCache.getLineGraphCache().addToCache(symbol, values)
+
+            if (result != null) {
+                callback.onSuccess(values)
+            }
+            else
+                callback.onError()
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun searchStocks(query : String, callback : StockSearchFetched) {
+        GlobalScope.launch (Dispatchers.IO + coroutineExceptionHandler){
+            lateinit var list: List<StockData>
+            val job = async {
+                try {
+                    list = YahooFinanceSearch().search(query)
+                } catch (exception: Exception) {
+                    callback.onError()
+                }
+            }
+            val result = job.await()
+
+            if (result != null) {
+                callback.onSuccess(list)
+            }
+            else
+                callback.onError()
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchAllStocks() {
+        GlobalScope.launch (Dispatchers.IO + coroutineExceptionHandler){
+            lateinit var list: List<StockData>
+            val job = async {
+                list = YahooFinanceSearch().fetchAllStocks()
+            }
+            val result = job.await()
+
+            if (result != null)
+                AllStockCache.getAllStockCache().updateCache(list)
+        }
+    }
+
+    interface AllStocksFetched
+    {
+
+    }
+
+    interface StockSearchFetched
+    {
+        fun onSuccess(result : List<StockData>)
+        fun onError()
+    }
+
+    interface StockHistoryFetched
+    {
+        fun onSuccess(result : List<Float>)
+        fun onError()
+    }
+
+    interface StockItemListFetched
     {
         fun onSuccess(result : StockItem)
         fun onError()
     }
 
-    public interface FetchCompleteListener
+    interface FetchCompleteListener
     {
         fun onSuccess(result : MutableList<StockItem> )
         fun onError()

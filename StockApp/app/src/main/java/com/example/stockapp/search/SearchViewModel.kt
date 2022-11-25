@@ -1,14 +1,12 @@
-package com.example.stockapp.stockcard
+package com.example.stockapp.search
 
-import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
-import com.example.stockapp.stockcache.StockSharedPref
-import com.example.stockapp.ui.home.HomeFragment
+import com.example.stockapp.stockcard.StockData
 
-class StockCardViewModel : ViewModel() {
+class SearchViewModel : ViewModel() {
     private lateinit var _data : ArrayList<StockData>
     val data : List<StockData>
-    get() = _data
+        get() = _data
 
     fun init() {
         _data = ArrayList()
