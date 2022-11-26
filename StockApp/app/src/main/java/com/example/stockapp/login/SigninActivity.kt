@@ -41,7 +41,7 @@ class SigninActivity : AppCompatActivity() {
         val username = binding.username.text.toString()
         val password = binding.password.text.toString()
         if (username.isEmpty() || password.isEmpty()) {
-            Toast.makeText(applicationContext, "Failed to login!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Failed to login! User Name or Password is Empty", Toast.LENGTH_SHORT).show()
             return;
         }
         auth.signInWithEmailAndPassword(username, password)
@@ -51,7 +51,7 @@ class SigninActivity : AppCompatActivity() {
                     val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(applicationContext, "Failed to login!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Failed to login! " + task.exception?.message, Toast.LENGTH_SHORT).show()
                 }
             }
     }

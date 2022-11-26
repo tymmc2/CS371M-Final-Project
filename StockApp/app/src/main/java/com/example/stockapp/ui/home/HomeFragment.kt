@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.stockapp.databinding.FragmentHomeBinding
 import com.example.stockapp.stockcache.StockDataCache
 import com.example.stockapp.stockcache.StockSharedPref
+import com.example.stockapp.stockcard.Stock
 import com.example.stockapp.stockcard.StockCardAdapter
 import com.example.stockapp.stockcard.StockCardViewModel
 import com.example.stockapp.stockcard.StockData

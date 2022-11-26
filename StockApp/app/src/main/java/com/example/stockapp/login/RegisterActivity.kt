@@ -47,7 +47,7 @@ class RegisterActivity : AppCompatActivity() {
                         startActivity(intent)
                         print("Logged in with user ${auth.currentUser}")
                     } else {
-                        Toast.makeText(applicationContext, "Failed to login!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Failed to login! " + task.exception?.message, Toast.LENGTH_SHORT).show()
                     }
                 }
         }
