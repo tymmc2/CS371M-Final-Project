@@ -8,5 +8,5 @@ data class StockData (
     val fullStockName: String,
     var stockPrice : Double,
     var stockPriceChange : String,
-    val quantityHolding: Double
+    var quantityHolding: Double
 )

@@ -12,8 +12,8 @@ interface PortfolioDataDao {
     @Query("SELECT * FROM stock WHERE name LIKE :queryName")
     fun findByName(queryName : String) : Flow<PortfolioDataEntity>
 
-    @Query("SELECT * FROM stock WHERE symbol LIKE :querySymbol")
-    fun findBySymbol(querySymbol : String) : Flow<PortfolioDataEntity>
+    @Query("SELECT * FROM stock WHERE symbol = :querySymbol")
+    fun findBySymbol(querySymbol : String) : Flow<List<PortfolioDataEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertALL(vararg stocks: PortfolioDataEntity)

@@ -81,12 +81,14 @@ class BuySellActivity : AppCompatActivity() {
             false
         }
         binding.bsButton.setOnClickListener {
+
+            stockData.quantityHolding = binding.bsEditText.text.toString().toDouble()
             if (isSell) {
                 HomeFragment.updateData(stockData, false, applicationContext)
-//                viewModel.updateStock(stockData)
+                stocksViewModel.updateStock(stockData, "S")
             } else {
                 HomeFragment.updateData(stockData, true,applicationContext)
-                stocksViewModel.insertStock(stockData)
+                stocksViewModel.insertStock(stockData, "B")
             }
 
             Toast.makeText(applicationContext,

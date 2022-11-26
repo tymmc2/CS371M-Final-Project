@@ -20,30 +20,56 @@ class BuySellViewModel : ViewModel(){
         portfolioDao = dao
         portfolio = portfolioDao.getAll().asLiveData()
     }
-    fun insertStock(stockData: StockData) {
+    fun insertStock(stockData: StockData, trade : String) {
+        var iquantity = getStock(stockData.stockName)?.quantityHolding
+        if (iquantity == null)
+        {
+            iquantity = 0.0
+        }
         viewModelScope.launch(Dispatchers.IO) { portfolioDao.insertOne(PortfolioDataEntity(
             random().toInt(),
             stockData.fullStockName,
             stockData.stockName,
             stockData.stockPrice,
             stockData.stockPriceChange,
-            stockData.quantityHolding)) }
+            stockData.quantityHolding + iquantity!!,trade)) }
     }
 
-    fun getStock(symbol : String) : StockData
+    fun getStock(symbol : String) : StockData?
     {
         val stock = portfolioDao.findBySymbol(symbol).asLiveData().value
-        return StockData(stock?.symbol!!, stock.name!!, stock.price, stock.change, stock.holding )
+        if (stock != null)
+        {
+            val stockSymbol = stock?.get(0)?.symbol
+            val stockName = stock?.get(0)?.name
+            var quantity : Double = 0.0
+            var price : Double = 0.0
+            for (s in stock)
+            {
+                quantity += s.holding
+                price += s.holding * s.price
+            }
+            price /= quantity
+            val priceChange = stock[-1].change
+
+            return StockData(stockSymbol!!, stockName!!, price, priceChange, quantity)
+        }
+
+        return stock
 
     }
 
-    fun updateStock(stockData: StockData)
+    fun updateStock(stockData: StockData, trade: String)
     {
         val stock = getStock(stockData.stockName)
-        var quantity = stock.quantityHolding - stockData.quantityHolding
-        if (quantity < 0 )
+        var quantity = 0.0
+        if (stock != null)
         {
-            quantity = 0.0
+            quantity = stock.quantityHolding.minus(stockData.quantityHolding)!!
+            if (quantity < 0 )
+            {
+                quantity = 0.0
+            }
         }
         val newStockData = StockData(
             stockData.stockName,
@@ -52,7 +78,7 @@ class BuySellViewModel : ViewModel(){
             stockData.stockPriceChange,
             quantity
         )
-        insertStock(newStockData)
+        insertStock(newStockData, trade)
     }
 
 //    fun deleteStock(stockData: StockData?, symbol : String)
