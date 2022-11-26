@@ -7,8 +7,12 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import com.example.stockapp.BaseApplication
 import com.example.stockapp.databinding.ActivityBuySellBinding
 import com.example.stockapp.home.HomeActivity
 import com.example.stockapp.home.HomeActivity.Companion.convertPriceToString
@@ -28,9 +32,15 @@ class BuySellActivity : AppCompatActivity() {
     private var total: Double = 0.0
     private var totalStock: Int = 0
 
+    private lateinit var stocksViewModel : BuySellViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBuySellBinding.inflate(layoutInflater)
+
+        stocksViewModel = ViewModelProvider(this)[BuySellViewModel::class.java]
+        stocksViewModel.init((application as BaseApplication).database.getDao())
+
         val extras = intent.extras
         if (extras != null) {
             val data = extras.getString(StockViewActivity.STOCK_DATA)
@@ -71,10 +81,20 @@ class BuySellActivity : AppCompatActivity() {
             false
         }
         binding.bsButton.setOnClickListener {
-            if (isSell) HomeFragment.updateData(stockData, false, applicationContext) else HomeFragment.updateData(stockData, true,applicationContext)
+            if (isSell) {
+                HomeFragment.updateData(stockData, false, applicationContext)
+//                viewModel.updateStock(stockData)
+            } else {
+                HomeFragment.updateData(stockData, true,applicationContext)
+                stocksViewModel.insertStock(stockData)
+            }
+
             Toast.makeText(applicationContext,
                 "${if (isSell) "Sold" else "Bought"} $totalStock stock of ${stockData.stockName}", Toast.LENGTH_SHORT)
                 .show()
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
 
         }
 

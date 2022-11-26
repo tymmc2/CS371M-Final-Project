@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StockApp</string>
+    <string name="app_name">StockSage</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
     <string name="search">Search</string>
@@ -15,7 +15,7 @@
     <string name="dash">-</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_password">Password : (Min 6 letters)</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
