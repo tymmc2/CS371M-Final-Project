@@ -82,21 +82,32 @@ class BuySellActivity : AppCompatActivity() {
         }
         binding.bsButton.setOnClickListener {
 
-            stockData.quantityHolding = binding.bsEditText.text.toString().toDouble()
-            if (isSell) {
-                HomeFragment.updateData(stockData, false, applicationContext)
-                stocksViewModel.updateStock(stockData, "S")
-            } else {
-                HomeFragment.updateData(stockData, true,applicationContext)
-                stocksViewModel.insertStock(stockData, "B")
+            if (binding.bsEditText.text.isEmpty())
+            {
+                Toast.makeText(applicationContext,
+                    "Quantity cannot be empty", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            else
+            {
+                stockData.quantityHolding = binding.bsEditText.text.toString().toDouble()
+
+                if (isSell) {
+                    stocksViewModel.insertStock(stockData, "S")
+                    HomeFragment.updateData(stockData, false, applicationContext)
+                } else {
+                    stocksViewModel.insertStock(stockData, "B")
+                    HomeFragment.updateData(stockData, true,applicationContext)
+                }
+
+                Toast.makeText(applicationContext,
+                    "${if (isSell) "Sold" else "Bought"} $totalStock stock of ${stockData.stockName}", Toast.LENGTH_SHORT)
+                    .show()
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
             }
 
-            Toast.makeText(applicationContext,
-                "${if (isSell) "Sold" else "Bought"} $totalStock stock of ${stockData.stockName}", Toast.LENGTH_SHORT)
-                .show()
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
 
         }
 

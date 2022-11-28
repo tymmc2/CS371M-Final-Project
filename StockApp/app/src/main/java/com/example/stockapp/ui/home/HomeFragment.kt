@@ -2,24 +2,21 @@ package com.example.stockapp.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.telephony.gsm.GsmCellLocation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import com.example.stockapp.BaseApplication
 import com.example.stockapp.databinding.FragmentHomeBinding
 import com.example.stockapp.stockcache.StockDataCache
 import com.example.stockapp.stockcache.StockSharedPref
-import com.example.stockapp.stockcard.Stock
 import com.example.stockapp.stockcard.StockCardAdapter
 import com.example.stockapp.stockcard.StockCardViewModel
 import com.example.stockapp.stockcard.StockData
 import com.example.stockapp.stockservice.StockAPI
 import com.example.stockapp.stockservice.StockItem
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -57,31 +54,20 @@ class HomeFragment : Fragment() {
         adapter = StockCardAdapter(this.context, true)
         binding.stocksRecyclerView.adapter = adapter
         stocksViewModel = ViewModelProvider(this)[StockCardViewModel::class.java]
-        stocksViewModel.init()
-//        binding.stocksRecyclerView.setHasFixedSize(true)
+        stocksViewModel.init((activity?.application as  BaseApplication).database.getDao())
 
-        if (StockSharedPref(requireContext()).getPortfolioStockData() != null)
+        stocksViewModel.getAllPortfolio(object : StockCardViewModel.DatabaseFetchListener
         {
-            val stockMap = StockSharedPref(requireContext()).getPortfolioStockData()
-            if (stockMap != null) {
-                StockAPI().getStockQuotesPortfolio(stockMap, object : StockAPI.FetchCompleteListener
-                {
-                    override fun onSuccess(result: MutableList<StockItem>) {
-
-                        val stockDataList : MutableList<StockData> = mutableListOf()
-                        result.forEach{
-                            entry -> stockDataList.add(StockData(entry.symbol, entry.name, entry.price, entry.change.toString(), stockMap[entry.symbol]!!))
-                        }
-                        GlobalScope.launch(Dispatchers.Main) { adapter.updateData(stockDataList)}
-                    }
-
-                    override fun onError() {
-
-                    }
-
-                })
+            override fun onSuccess(stockList: List<StockData>) {
+                // Hide the banner
+                if (stockList.isNotEmpty()) {
+                    binding.emptyHome.text = ""
+                }
+                adapter.updateData(stockList)
             }
-        }
+
+        })
+
         return root
     }
 
