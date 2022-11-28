@@ -5,5 +5,5 @@ import java.math.BigDecimal
 
 data class ProfileData(
     val profileName: String,
-    val profileValue: Double
+    var profileValue: Double
 )

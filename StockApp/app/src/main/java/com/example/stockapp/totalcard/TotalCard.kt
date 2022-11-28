@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewModelScope
 import com.example.stockapp.BaseApplication
 import com.example.stockapp.R
 import com.example.stockapp.home.HomeActivity.Companion.convertPriceToString
 import com.fasterxml.jackson.databind.ser.Serializers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TotalCard : Fragment() {
 
@@ -40,10 +44,11 @@ class TotalCard : Fragment() {
                 viewModel.changeMoney(total)
                 val amount = viewModel.data.amount
                 val amtChange = viewModel.data.amtChange
-
-                totalView!!.text = convertPriceToString(amount)
-                "${if (amtChange > 0.0) "+" else "" }${convertPriceToString(amtChange)}"
-                    .also { change!!.text = it }
+                viewModel.viewModelScope.launch(Dispatchers.Main) {
+                    totalView!!.text = convertPriceToString(amount)
+                    "${if (amtChange > 0.0) "+" else "" }${convertPriceToString(amtChange)}"
+                        .also { change!!.text = it }
+                }
             }
 
         })

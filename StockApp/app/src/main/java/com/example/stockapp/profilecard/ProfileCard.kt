@@ -6,7 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.stockapp.BaseApplication
 import com.example.stockapp.R
+import com.example.stockapp.totalcard.TotalCardViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class ProfileCard : Fragment() {
