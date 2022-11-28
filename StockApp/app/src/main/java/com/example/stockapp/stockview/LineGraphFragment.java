@@ -60,12 +60,6 @@ public class LineGraphFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment LineGraphFragment.
-     */
     public static LineGraphFragment newInstance(String symbol, Double priceChange, Float currentPrice) {
         LineGraphFragment fragment = new LineGraphFragment();
         Bundle args = new Bundle();
