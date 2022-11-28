@@ -60,24 +60,27 @@ class HomeFragment : Fragment() {
         {
             override fun onSuccess(stockList: List<StockData>) {
                 // Hide the banner
-                if (stockList.isNotEmpty()) {
-                    binding.emptyHome.text = ""
-                }
                 adapter.updateData(stockList)
+                updateEmptyHomeText()
             }
 
         })
+        updateEmptyHomeText()
 
         return root
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (stocksViewModel.data.isNotEmpty()) {
+    private fun updateEmptyHomeText() {
+        if (adapter.itemCount > 0) {
             binding.emptyHome.visibility = View.GONE
         } else {
             binding.emptyHome.visibility = View.VISIBLE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateEmptyHomeText()
         adapter.notifyDataSetChanged()
     }
 
