@@ -28,6 +28,7 @@ class StockCardAdapter(
         val stockName: TextView = view!!.findViewById(R.id.stock_name)
         val stockPrice: TextView = view!!.findViewById(R.id.stock_price)
         val stockPriceChange: TextView = view!!.findViewById(R.id.stock_price_change)
+        val stockHolding : TextView = view!!.findViewById(R.id.stock_quantity)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockCardHolder {
@@ -67,5 +68,6 @@ class StockCardAdapter(
         if (items[position].stockPriceChange.contains("-")) {
             holder.stockPriceChange.setTextColor(Color.RED)
         }
+        holder.stockHolding.text = "Quantity: " + items[position].quantityHolding.toString()
     }
 }

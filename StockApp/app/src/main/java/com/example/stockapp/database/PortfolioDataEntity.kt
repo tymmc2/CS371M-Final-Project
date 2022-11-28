@@ -11,5 +11,6 @@ data class PortfolioDataEntity(
     @ColumnInfo(name = "symbol") val symbol: String?,
     @ColumnInfo(name = "lastTradedPrice") val price : Double,
     @ColumnInfo(name = "percentChange") val change : String,
-    @ColumnInfo(name = "holding") val holding : Double
+    @ColumnInfo(name = "holding") val holding : Double,
+    @ColumnInfo(name = "trade") val trade : String
 )
