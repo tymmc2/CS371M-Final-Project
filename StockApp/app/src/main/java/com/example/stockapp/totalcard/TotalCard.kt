@@ -1,5 +1,6 @@
 package com.example.stockapp.totalcard
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -40,14 +41,19 @@ class TotalCard : Fragment() {
         val change = view?.findViewById<TextView>(R.id.change)
         viewModel.getPortfolioValue(object : TotalCardViewModel.ComputeListener
         {
-            override fun computeFinish(total: Double) {
-                viewModel.changeMoney(total)
+            override fun computeFinish(total: Double, priceChange: Double) {
+                viewModel.changeMoney(total, priceChange)
                 val amount = viewModel.data.amount
                 val amtChange = viewModel.data.amtChange
                 viewModel.viewModelScope.launch(Dispatchers.Main) {
                     totalView!!.text = convertPriceToString(amount)
                     "${if (amtChange > 0.0) "+" else "" }${convertPriceToString(amtChange)}"
-                        .also { change!!.text = it }
+                        .also {
+                            change!!.text = it
+                            if (amtChange < 0.0) {
+                                change.setTextColor(Color.RED)
+                            }
+                        }
                 }
             }
 

@@ -50,17 +50,21 @@ class TotalCardViewModel : ViewModel() {
             var total: Double = 0.0
             for (value in portfolio.values.toList())
                 total += value.quantityHolding * value.stockPrice
-            callback.computeFinish(total)
+
+            val lastItem = portfolioStocks[portfolioStocks.size - 1]
+            val diff = lastItem.price * lastItem.holding
+            val priceChange = if (lastItem.trade == "B") diff else -diff
+            callback.computeFinish(total, priceChange)
         }
     }
 
-    fun changeMoney(amount: Double) {
+    fun changeMoney(amount: Double, change: Double) {
         data.amount += amount
-        data.amtChange = amount
+        data.amtChange = change
     }
 
     interface ComputeListener
     {
-        fun computeFinish(total : Double)
+        fun computeFinish(total : Double, priceChange : Double)
     }
 }

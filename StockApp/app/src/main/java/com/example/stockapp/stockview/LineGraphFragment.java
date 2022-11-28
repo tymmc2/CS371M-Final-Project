@@ -76,6 +76,19 @@ public class LineGraphFragment extends Fragment {
         return fragment;
     }
 
+    public static LineGraphFragment newInstance(List<Double> history, Double priceChange) {
+        LineGraphFragment fragment = new LineGraphFragment();
+        Bundle args = new Bundle();
+        float[] floatArr = new float[history.size()];
+        for (int i = 0; i < history.size(); i++) {
+            floatArr[i] = history.get(i).floatValue();
+        }
+        args.putFloatArray(StockViewActivity.HISTORY, floatArr);
+        args.putDouble(StockViewActivity.PRICE_CHANGE, priceChange);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,7 +110,7 @@ public class LineGraphFragment extends Fragment {
             isNegative = priceChange < 0.0;
             symbol = getArguments().getString(StockViewActivity.SYMBOL);
         }
-        if (!symbol.equals("")) {
+        if (symbol != null && !symbol.equals("")) {
             try {
                 List<Float> list = LineGraphCache.getLineGraphCache().getCacheValues(symbol);
                 if (list == null) {
@@ -111,7 +124,13 @@ public class LineGraphFragment extends Fragment {
                 setData(20, 180, isNegative);
             }
         } else {
-            setData(20, 180, isNegative);
+            float[] arr = getArguments().getFloatArray(StockViewActivity.HISTORY);
+            List<Float> floatList = new ArrayList<>();
+            for (float f : arr) {
+                floatList.add(f);
+            }
+            updateEntries(floatList);
+            updateData(isNegative);
         }
 
         chart.getLegend().setEnabled(false);

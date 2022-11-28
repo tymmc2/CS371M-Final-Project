@@ -54,7 +54,7 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        profileViewModel.getPortfolioValue(object : TotalCardViewModel.ComputeListener
+        profileViewModel.getPortfolioValue(object : ProfileCardViewModel.ComputeListener
         {
             override fun computeFinish(total: Double) {
                 GlobalScope.launch(Dispatchers.Main) {

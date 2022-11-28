@@ -23,7 +23,7 @@ class ProfileCardViewModel : ViewModel() {
         _data.add(data)
     }
 
-    fun getPortfolioValue(callback : TotalCardViewModel.ComputeListener)
+    fun getPortfolioValue(callback : ComputeListener)
     {
         viewModelScope.launch(Dispatchers.IO) {
             val portfolioStocks = portfolioDao.getAllSync()
@@ -54,5 +54,10 @@ class ProfileCardViewModel : ViewModel() {
                 total += value.quantityHolding * value.stockPrice
             callback.computeFinish(total)
         }
+    }
+
+    interface ComputeListener
+    {
+        fun computeFinish(total : Double)
     }
 }

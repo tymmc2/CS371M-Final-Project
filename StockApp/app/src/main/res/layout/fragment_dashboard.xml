@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@id/home_total_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-    <fragment class="com.example.stockapp.stockview.LineGraphFragment"
+    <fragment class="com.example.stockapp.stockview.PlaceholderFragment"
         android:layout_height="300dp"
         android:id="@+id/db_line_graph"
         android:layout_margin="12dp"

@@ -36,6 +36,7 @@ class StockViewActivity : AppCompatActivity() {
         const val SELLABLE : String = "sellable"
         const val TYPE : String = "type"
         const val CURRENT_PRICE : String = "current_price"
+        const val HISTORY : String = "stock_history"
     }
     private var stockItem : StockItem? = null
 
