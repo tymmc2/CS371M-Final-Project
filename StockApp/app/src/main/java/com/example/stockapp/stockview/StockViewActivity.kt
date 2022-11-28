@@ -8,8 +8,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.MenuItem
 import android.view.View
 import com.example.stockapp.R
@@ -42,6 +44,7 @@ class StockViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityStockViewBinding.inflate(layoutInflater)
         val extras = intent.extras
         if (extras != null) {
@@ -54,10 +57,10 @@ class StockViewActivity : AppCompatActivity() {
                 binding.sellButton.visibility = View.GONE
             }
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         val querySymbol : String? = intent.extras?.getString(SYMBOL)
         getStockInformation(querySymbol)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
 
         binding.buyButton.setOnClickListener{
@@ -97,10 +100,9 @@ class StockViewActivity : AppCompatActivity() {
             binding.svPreviousClose.text = stockItem?.previousClose?.toString()
             binding.svVolume.text = stockItem?.volume?.toString()
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.sv_line_graph, LineGraphFragment.newInstance(stockItem!!.symbol, stockItem?.changeInPercent, stockItem?.price!!.toFloat()))
+            transaction.replace(R.id.sv_graph_placeholder, LineGraphFragment.newInstance(stockItem!!.symbol, stockItem?.changeInPercent, stockItem?.price!!.toFloat()))
             transaction.commit()
         }
-
     }
 
     @OptIn(DelicateCoroutinesApi::class)

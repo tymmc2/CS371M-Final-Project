@@ -84,6 +84,22 @@ public class LineGraphFragment extends Fragment {
     }
 
     @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        switch (newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                chart.getXAxis().setTextColor(Color.BLACK);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                chart.getXAxis().setTextColor(Color.WHITE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -94,6 +110,19 @@ public class LineGraphFragment extends Fragment {
             chart.setDrawGridBackground(false);
             chart.setDragEnabled(true);
             chart.setPinchZoom(true);
+            chart.getAxisRight().setEnabled(false);
+        }
+
+
+        switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                chart.getXAxis().setTextColor(Color.WHITE);
+                chart.getAxisLeft().setTextColor(Color.WHITE);
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                chart.getXAxis().setTextColor(Color.BLACK);
+                chart.getAxisLeft().setTextColor(Color.BLACK);
+                break;
         }
 
         double priceChange = 0;
@@ -117,14 +146,16 @@ public class LineGraphFragment extends Fragment {
                 e.printStackTrace();
                 setData(20, 180, isNegative);
             }
-        } else {
+        } else if (getArguments() != null) {
             float[] arr = getArguments().getFloatArray(StockViewActivity.HISTORY);
-            List<Float> floatList = new ArrayList<>();
-            for (float f : arr) {
-                floatList.add(f);
+            if (arr != null) {
+                List<Float> floatList = new ArrayList<>();
+                for (float f : arr) {
+                    floatList.add(f);
+                }
+                updateEntries(floatList);
+                updateData(isNegative);
             }
-            updateEntries(floatList);
-            updateData(isNegative);
         }
 
         chart.getLegend().setEnabled(false);

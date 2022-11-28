@@ -29,14 +29,12 @@
         </activity>
         <activity
             android:name=".search.SearchActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".buysellview.BuySellActivity"
             android:exported="false" />
         <activity
             android:name=".stockview.StockViewActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
