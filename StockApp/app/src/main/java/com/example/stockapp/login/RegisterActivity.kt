@@ -49,6 +49,10 @@ class RegisterActivity : AppCompatActivity() {
         val username = binding.username.text.toString()
         val password = binding.password.text.toString()
         val confirm = binding.confirmPassword.text.toString()
+        if (username.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+            Toast.makeText(applicationContext, "Failed to create account! User Name or Password is Empty", Toast.LENGTH_SHORT).show()
+            return;
+        }
         if (password != confirm) {
             Toast.makeText(applicationContext, "Passwords do not match!", Toast.LENGTH_SHORT).show()
         } else {

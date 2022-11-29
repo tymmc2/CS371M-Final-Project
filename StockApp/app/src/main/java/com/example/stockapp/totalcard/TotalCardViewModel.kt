@@ -51,9 +51,12 @@ class TotalCardViewModel : ViewModel() {
             for (value in portfolio.values.toList())
                 total += value.quantityHolding * value.stockPrice
 
-            val lastItem = portfolioStocks[portfolioStocks.size - 1]
-            val diff = lastItem.price * lastItem.holding
-            val priceChange = if (lastItem.trade == "B") diff else -diff
+            var priceChange = 0.0
+            if (portfolioStocks.isNotEmpty()) {
+                val lastItem = portfolioStocks[portfolioStocks.size - 1]
+                val diff = lastItem.price * lastItem.holding
+                priceChange = if (lastItem.trade == "B") diff else -diff
+            }
             callback.computeFinish(total, priceChange)
         }
     }

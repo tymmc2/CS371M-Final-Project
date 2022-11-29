@@ -68,6 +68,10 @@ class DashboardFragment : Fragment() {
         GlobalScope.launch(Dispatchers.IO) {
             val portfolioStocks = portfolioDao.getAllSync()
             var portfolio: MutableMap<String, StockData> = mutableMapOf()
+            if (portfolioStocks.isEmpty()) {
+                callback.computeFinish(ArrayList(), 0.0)
+                return@launch
+            }
             for (stock in portfolioStocks) {
                 val sym = stock.symbol.toString()
                 if (portfolio.contains(sym)) {
@@ -101,7 +105,7 @@ class DashboardFragment : Fragment() {
                     list.add(0, list[0] + if (currentItem.trade == "B") -diff else diff)
                 }
             }
-            callback.computeFinish(list, list[list.size - 1] - list[list.size - 2])
+            callback.computeFinish(list, 0.0)
         }
     }
 

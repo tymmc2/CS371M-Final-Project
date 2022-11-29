@@ -77,8 +77,10 @@ public class LineGraphFragment extends Fragment {
         for (int i = 0; i < history.size(); i++) {
             floatArr[i] = history.get(i).floatValue();
         }
-        args.putFloatArray(StockViewActivity.HISTORY, floatArr);
-        args.putDouble(StockViewActivity.PRICE_CHANGE, priceChange);
+        if (floatArr.length > 0) {
+            args.putFloatArray(StockViewActivity.HISTORY, floatArr);
+            args.putDouble(StockViewActivity.PRICE_CHANGE, priceChange);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -212,7 +214,6 @@ public class LineGraphFragment extends Fragment {
         } else {
             set1 = new LineDataSet(entryList, "StockSet");
             set1.setDrawIcons(false);
-            set1.setColor(isNegative ? Color.RED : Color.GREEN);
             set1.setLineWidth(2f);
             set1.setDrawCircles(false);
             set1.setDrawCircleHole(false);
@@ -228,11 +229,19 @@ public class LineGraphFragment extends Fragment {
             // set color of filled area
             if (Utils.getSDKInt() >= 18) {
                 // drawables only supported on api level 18 and above
-                Drawable drawable;
-                drawable = ContextCompat.getDrawable(this.getContext(),
-                        isNegative ? R.drawable.fade_red : R.drawable.fade_green);
-                set1.setFillDrawable(drawable);
+                String symbol = getArguments().getString(StockViewActivity.SYMBOL);
+                if (symbol == null) {
+                    set1.setFillDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.fade_blue));
+                    set1.setColor(Color.BLUE);
+                } else {
+                    Drawable drawable;
+                    drawable = ContextCompat.getDrawable(this.getContext(),
+                            isNegative ? R.drawable.fade_red : R.drawable.fade_green);
+                    set1.setColor(isNegative ? Color.RED : Color.GREEN);
+                    set1.setFillDrawable(drawable);
+                }
             } else {
+                set1.setColor(isNegative ? Color.RED : Color.GREEN);
                 set1.setFillColor(Color.BLACK);
             }
 
