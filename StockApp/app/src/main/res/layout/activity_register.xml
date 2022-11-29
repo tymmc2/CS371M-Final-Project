@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
+        <com.github.infinitebanner.InfiniteBannerView
+            android:id="@+id/register_banner"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:bannerAutoScroll="true"/>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/register_card"
             android:layout_width="match_parent"
