@@ -82,7 +82,7 @@ class BuySellActivity : AppCompatActivity() {
         }
         binding.bsButton.setOnClickListener {
 
-            if (binding.bsEditText.text.isEmpty())
+            if (binding.bsEditText.text.isEmpty() || totalStock == 0)
             {
                 Toast.makeText(applicationContext,
                     "Quantity cannot be empty", Toast.LENGTH_SHORT)
