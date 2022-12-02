@@ -144,7 +144,9 @@ class StockAPI {
                 val history = stock.history
                 for (i in history.indices) {
                     val currentQuote = history[i]
-                    values.add(currentQuote.close.toFloat())
+                    if (currentQuote != null && currentQuote.close != null) {
+                        values.add(currentQuote.close.toFloat())
+                    }
                 }
             }
             val result = job.await()
