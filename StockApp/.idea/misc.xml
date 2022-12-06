@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.34172661870503596" />
+        <entry key="app/src/main/res/drawable/fade_green.xml" value="0.2015" />
+        <entry key="app/src/main/res/drawable/fade_red.xml" value="0.2015" />
+        <entry key="app/src/main/res/drawable/ic_coin.xml" value="0.296" />
+        <entry key="app/src/main/res/layout-w1240dp/activity_login.xml" value="0.11847389558232932" />
+        <entry key="app/src/main/res/layout-w936dp/activity_login.xml" value="0.13828125" />
+        <entry key="app/src/main/res/layout/activity_buy_sell.xml" value="0.2512969970703125" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.2206945446954257" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.184375" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.24909420289855072" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.33489583333333334" />
+        <entry key="app/src/main/res/layout/activity_search.xml" value="0.19479166666666667" />
+        <entry key="app/src/main/res/layout/activity_signin.xml" value="0.19479166666666667" />
+        <entry key="app/src/main/res/layout/activity_stock_view.xml" value="0.277716064453125" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3875" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3541666666666667" />
+        <entry key="app/src/main/res/layout/fragment_line_graph.xml" value="0.184375" />
+        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_profile_card.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_stock_card.xml" value="0.24909420289855072" />
+        <entry key="app/src/main/res/layout/fragment_stock_graph.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_total_card.xml" value="0.184375" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
